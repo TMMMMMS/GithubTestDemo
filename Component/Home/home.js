@@ -12,7 +12,7 @@ export default class Home extends Component{
     
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Home页面</Text>
+        <Text style={styles.welcome}>Home页面!!!!!</Text>
       </View>
     );
   }
