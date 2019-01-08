@@ -4,9 +4,6 @@ import {StyleSheet, Text, View} from 'react-native';
 
 export default class Home extends Component{
 
-//   static navigationOptions = {
-//     header:null,  //隐藏顶部导航栏
-//   };
   render() {
     
     return (

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Button, Text, View, Image } from 'react-native';
+import { Text, View } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createStackNavigator, createBottomTabNavigator, createAppContainer } from 'react-navigation';
@@ -52,7 +52,7 @@ const MoreStack = createStackNavigator({
 });
 
 export default createAppContainer(createBottomTabNavigator(
- 
+
   {
     Home: {
       screen: HomeStack, // 对应跳转到的界面
@@ -141,3 +141,4 @@ export default createAppContainer(createBottomTabNavigator(
     }
   }
 ));
+

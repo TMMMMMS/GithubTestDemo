@@ -27,22 +27,34 @@ import { StackNavigator } from 'react-navigation';
 
 export default class App extends Component {
 
-  // componentDidMount() {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showWelcome: true
+    }
+  }
 
-  //   this.timer = setTimeout(() => {
+  componentDidMount() {
 
-  //   }, 2000);
-  // }
+    this.timer = setTimeout(() => {
+      this.setState({
+        showWelcome: false
+      })
+    }, 2000);
+  }
 
-  // componentWillUnmount() {
-  //   if (this.timer) {
-  //     this.timer.
-  //   }
-  // }
+  componentWillUnmount() {
+    if (this.timer) {
+      clearInterval(this.timer);
+    }
+  }
 
 
   render() {
     return (
+      // <Main />
+      this.state.showWelcome ? 
+      <Welcome /> :
       <Main />
     );
   }
