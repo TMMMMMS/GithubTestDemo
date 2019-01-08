@@ -9,21 +9,6 @@
 import React, { Component } from 'react';
 import Main from './Component/Main/main';
 import Welcome from './Component/Welcome/welcome';
-import { StackNavigator } from 'react-navigation';
-
-// const RootApp = StackNavigator({
-//   Main: { screen: Main },
-//   Welcome: {
-//     screen: Welcome,
-//     navigationOptions: ({ navigation }) => ({
-//       header: null
-//     })
-//   }
-// },
-//   {
-//     initialRouteName: 'Welcome',
-//     headerMode: 'screen'
-//   });
 
 export default class App extends Component {
 
@@ -34,28 +19,27 @@ export default class App extends Component {
     }
   }
 
-  componentDidMount() {
+  // componentDidMount() {
 
-    this.timer = setTimeout(() => {
-      this.setState({
-        showWelcome: false
-      })
-    }, 2000);
-  }
+  //   this.timer = setTimeout(() => {
+  //     this.setState({
+  //       showWelcome: false
+  //     })
+  //   }, 2000);
+  // }
 
-  componentWillUnmount() {
-    if (this.timer) {
-      clearInterval(this.timer);
-    }
-  }
-
+  // componentWillUnmount() {
+  //   if (this.timer) {
+  //     clearInterval(this.timer);
+  //   }
+  // }
 
   render() {
     return (
-      // <Main />
-      this.state.showWelcome ? 
-      <Welcome /> :
       <Main />
+      // this.state.showWelcome ?
+      //   <Welcome /> :
+      //   <Main />
     );
   }
 }
