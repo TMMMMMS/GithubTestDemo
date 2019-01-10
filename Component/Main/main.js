@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Image, TouchableOpacity } from 'react-native';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { createStackNavigator, createBottomTabNavigator, createAppContainer } from 'react-navigation';
@@ -9,6 +9,7 @@ import Home from '../Home/home';
 import Shop from '../Shop/shop';
 import Mine from '../Mine/mine';
 import More from '../More/more';
+import CustomKeyPage from '../More/CustomKeyPage';
 
 class DetailsScreen extends React.Component {
   render() {
@@ -16,6 +17,19 @@ class DetailsScreen extends React.Component {
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <Text>Details!</Text>
       </View>
+    );
+  }
+}
+
+class BackImage extends React.Component { //创建一个返回按钮的组件
+  render() {
+    return (
+      <TouchableOpacity style={{flex:1}}>
+        <Image
+          source={{ uri: 'ic_arrow_back_white_36pt' }}
+          style={{ width: 8, height: 15 }}
+        />
+      </TouchableOpacity>
     );
   }
 }
@@ -47,9 +61,27 @@ const MineStack = createStackNavigator({
 });
 
 const MoreStack = createStackNavigator({
-  More: { screen: More },
-  Details: { screen: DetailsScreen },
+  More: {
+    screen: More,
+    navigationOptions: {
+      headerBackTitle: "返回",
+    }
+  },
+  CustomKeyPage: {
+    screen: CustomKeyPage,
+  },
 });
+
+MoreStack.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = true;
+  if (navigation.state.index > 0) {
+    tabBarVisible = false;
+  }
+
+  return {
+    tabBarVisible,
+  };
+};
 
 export default createAppContainer(createBottomTabNavigator(
 

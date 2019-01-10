@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, View, FlatList, RefreshControl } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import DataRepository from '../../expand/dao/DataRepository';
 import RepositoryCell from '../../Common/RepositoryCell';
@@ -17,7 +17,8 @@ export default class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      result: ''
+      result: '',
+      refreshing: false,
     };
     this.dataRepository = new DataRepository();
     this.onload = this.onload.bind(this);
@@ -44,21 +45,12 @@ export default class Home extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <ScrollableTabView>
+        <ScrollableTabView tabBarUnderlineStyle={{ backgroundColor: '#1296db' }} tabBarActiveTextColor='#1296db'>
           <PopularTab tabLabel="iOS">iOS</PopularTab>
           <PopularTab tabLabel="Android">Android</PopularTab>
           <PopularTab tabLabel="JavaScript">JavaScript</PopularTab>
           <PopularTab tabLabel="Java">Java</PopularTab>
         </ScrollableTabView>
-        {/* <Text
-          style={styles.welcome}
-          onPress={this.onload}
-        >获取数据</Text>
-        <TextInput
-          style={{ height: 40, borderWidth: 1 }}
-          onChangeText={text => this.text = text}
-        />
-        <Text style={{height:400}}>{this.state.result}</Text> */}
       </View>
     );
   }
@@ -73,6 +65,7 @@ class PopularTab extends Component {
     };
     this.dataRepository = new DataRepository();
     this.renderItem = this.renderItem.bind(this);
+    this.onload = this.onload.bind(this);
   }
 
   componentDidMount() {
@@ -80,28 +73,25 @@ class PopularTab extends Component {
   }
 
   onload() {
-    let url = URL + this.props.tabLabel + QUERY_STR
+    let url = URL + this.props.tabLabel + QUERY_STR;
+    this.setState({ refreshing: true });
     this.dataRepository.fetchNetRepository(url)
       .then(result => {
         this.setState({
-          data: result.items
+          data: result.items,
+          refreshing: false
         })
       })
       .catch(error => {
         this.setState({
-          result: JSON.stringify(error)
+          result: JSON.stringify(error),
+          refreshing: false
         })
       })
   }
   renderItem(data) {
     return (
       <RepositoryCell item={data.item} />
-      // <View style={{padding:10}}>
-      //   <Text>{item.item.full_name}</Text>
-      //   <Text>{item.item.description}</Text>
-      //   <Text>{item.item.owner.avatar_url}</Text>
-      //   <Text>{item.item.stargazers_count}</Text>
-      // </View>
     );
   }
 
@@ -114,7 +104,15 @@ class PopularTab extends Component {
           keyExtractor={this._keyExtractor}
           data={this.state.data}
           renderItem={this.renderItem}
-        // ListHeaderComponent={<HomePageHeaderView />}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.state.refreshing}
+              onRefresh={this.onload}
+              colors={['#1296db']}
+              title={'Loading'}
+              titleColor={['#1296db']}
+            />
+          }
         />
       </View>
     )
@@ -124,9 +122,5 @@ class PopularTab extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  welcome: {
-    paddingTop: 50,
-    fontSize: 20,
   },
 });

@@ -4,12 +4,13 @@ import {Platform, StyleSheet, Text, View} from 'react-native';
 
 export default class More extends Component{
   static navigationOptions = {
-    header:null,  //隐藏顶部导航栏
+    title:'我的',
   };
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>More页面</Text>
+        <Text style={styles.welcome} onPress={()=>{this.props.navigation.push('CustomKeyPage')}} >自定义标签</Text>
       </View>
     );
   }
