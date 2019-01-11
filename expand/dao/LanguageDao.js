@@ -21,14 +21,14 @@ export default class DataRepository {
                 } else {
                     if (result) {
                         try {
-                            resolve(JSON.stringify(result));
+                            resolve(JSON.parse(result));
                         } catch(e) {
                             rejcet(e);
                         }
                     } else {
                         var data = this.flag === FLAG_LANGUAGE.flag_key ? keys : null;
                         this.save(data);
-                        resolve(data);
+                        resolve(JSON.parse(data));
                     }
                 }
             })

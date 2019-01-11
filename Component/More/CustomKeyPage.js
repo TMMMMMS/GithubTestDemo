@@ -1,27 +1,10 @@
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, DeviceEventEmitter } from 'react-native';
 import LanguageDao, { FLAG_LANGUAGE } from '../../expand/dao/LanguageDao';
-
-class RightItem extends Component {
-
-    constructor(props) {
-        super(props);
-        this.onSave = this.onSave.bind(this);
-    }
-
-    onSave() {
-        alert('保存了');
-    }
-
-    render() {
-        return (
-            <TouchableOpacity style={{ flex: 1, paddingRight: 15 }} onPress={this.onSave}>
-                <Text style={{ fontSize: 16, color: '#1296db' }}>保存</Text>
-            </TouchableOpacity>
-        );
-    }
-}
+import CheckBox from 'react-native-check-box';
+import ViewUtils from '../../Util/ViewUtils';
+import ArrayUtils from '../../Util/ArrayUtils';
 
 class BackImage extends React.Component { //创建一个返回按钮的组件
     render() {
@@ -37,37 +20,92 @@ class BackImage extends React.Component { //创建一个返回按钮的组件
 }
 
 export default class CustomKeyPage extends Component {
-    static navigationOptions = {
+
+    static navigationOptions = ({ navigation, screenProps }) => ({
+
         title: '自定义标签',
         headerBackTitle: null,
-        headerRight: <RightItem />,
+        headerRight: ViewUtils.getRightButton('保存', navigation.state.params ? navigation.state.params.onSave : null),
         headerBackImage: <BackImage />
-    };
+    });
 
     constructor(props) {
         super(props);
+        this.changeValues = [];
         this.state = {
-            dataArray: []
+            dataArray: [],
+            text: "打印了",
         }
         this.languageDao = new LanguageDao(FLAG_LANGUAGE.flag_key);
+
     }
 
     componentDidMount() {
+
+        this.subscription = DeviceEventEmitter.addListener('xxxName',()=>{
+            this.onRefresh();
+        });
+        this.props.navigation.setParams({
+            onSave: this.onSave,
+        })
         this.loadData();
+
+    }
+    
+    componentWillUnmount() {
+        this.subscription.remove();
+    }
+
+    onSave() {
+        DeviceEventEmitter.emit('xxxName'); 
+    }
+
+    onRefresh() {
+        alert(this.state.text);
     }
 
     renderView() {
-        // if (!this.state.dataArray || this.state.dataArray.length == 0) {
-        //     return;
-        // }
-        // let len = this.state.dataArray.length;
-        // let views = [];
-        // for (let i = 0; i < len - 2; i+=2) {
-            
-            
-        // }
+        if (!this.state.dataArray || this.state.dataArray.length == 0) {
+            return;
+        }
+        let len = this.state.dataArray.length;
+        let views = [];
+        for (let i = 0; i < len - 2; i += 2) {
+            views.push(
+                <View key={i}>
+                    <View style={styles.item}>
+                        {this.renderCheckBox(this.state.dataArray[i])}
+                        {this.renderCheckBox(this.state.dataArray[i + 1])}
+                    </View>
+                    <View style={styles.line}></View>
+                </View>
+            )
+        }
+        views.push(
+            <View key={len - 1}>
+                <View style={styles.item}>
+                    {len % 2 === 0 ? this.renderCheckBox(this.state.dataArray[len - 2]) :
+                        this.renderCheckBox(this.state.dataArray[len - 1])
+                    }
+                </View>
+                <View style={styles.line}></View>
+            </View>
+        )
+        return views;
+    }
 
-        return <Text>{JSON.stringify(this.state.dataArray)}</Text>
+    renderCheckBox(data) {
+
+        let leftText = data.name;
+        return (
+            <CheckBox
+                style={{ flex: 1, padding: 10 }}
+                onClick={() => this.onClick(data)}
+                leftText={leftText}
+                checkedImage={<Image style={{ width: 25, height: 25, tintColor: '#1296db' }} source={{ uri: 'ic_check_box' }} />}
+                unCheckedImage={<Image style={{ width: 25, height: 25, tintColor: '#1296db' }} source={{ uri: 'ic_check_box_outline_blank' }} />}
+            />
+        )
     }
 
     render() {
@@ -91,10 +129,23 @@ export default class CustomKeyPage extends Component {
                 console.log(error);
             })
     }
+
+    onClick(data) {
+        data.checked = !data.checked;
+        ArrayUtils.updateArray(this.changeValues, data);
+    }
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    line: {
+        backgroundColor: 'darkgray',
+        height: 0.3,
+    },
+    item: {
+        alignItems: 'center',
+        flexDirection: 'row',
+    }
 });

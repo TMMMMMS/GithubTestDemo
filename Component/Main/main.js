@@ -21,19 +21,6 @@ class DetailsScreen extends React.Component {
   }
 }
 
-class BackImage extends React.Component { //创建一个返回按钮的组件
-  render() {
-    return (
-      <TouchableOpacity style={{flex:1}}>
-        <Image
-          source={{ uri: 'ic_arrow_back_white_36pt' }}
-          style={{ width: 8, height: 15 }}
-        />
-      </TouchableOpacity>
-    );
-  }
-}
-
 const HomeStack = createStackNavigator({
   Home: { screen: Home },
   Details: { screen: DetailsScreen },

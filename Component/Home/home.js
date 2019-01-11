@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, FlatList, RefreshControl } from 'react-native';
+import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import DataRepository from '../../expand/dao/DataRepository';
 import RepositoryCell from '../../Common/RepositoryCell';
