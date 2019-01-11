@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, ScrollView, DeviceEventEmitter } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image, ScrollView, DeviceEventEmitter } from 'react-native';
 import LanguageDao, { FLAG_LANGUAGE } from '../../expand/dao/LanguageDao';
 import CheckBox from 'react-native-check-box';
 import ViewUtils from '../../Util/ViewUtils';
@@ -20,6 +20,16 @@ class BackImage extends React.Component { //创建一个返回按钮的组件
 }
 
 export default class CustomKeyPage extends Component {
+
+
+/*
+    static中的this问题
+    1.在页面A中的componentDidMount方法，利用参数将方法传递给封装好的控件A，此时this指向的是控件A
+        this.props.navigation.setParams({
+            onSave: this.onSave,
+        })
+    2.利用通知机制通知页面A，将this指向页面A，调用页面A内的具体方法
+*/
 
     static navigationOptions = ({ navigation, screenProps }) => ({
 
