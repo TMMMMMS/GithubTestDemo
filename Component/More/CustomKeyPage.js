@@ -20,9 +20,9 @@ export default class CustomKeyPage extends Component {
 
     static navigationOptions = ({ navigation, screenProps }) => ({
 
-        title: '自定义标签',
+        title: navigation.state.params && navigation.state.params.isRemoveKey ? '标签移除' : '自定义标签',
         headerBackTitle: null,
-        headerRight: ViewUtils.getRightButton('保存', navigation.state.params ? navigation.state.params.onSave : null),
+        headerRight: ViewUtils.getRightButton(navigation.state.params && navigation.state.params.isRemoveKey ? '移除' : '保存', navigation.state.params ? navigation.state.params.onSave : null),
         headerLeft: <View>
             <TouchableOpacity style={{ width: 44, height: 44, justifyContent: 'center', alignItems: 'center' }}
                 onPress={() => {
@@ -40,6 +40,7 @@ export default class CustomKeyPage extends Component {
     constructor(props) {
         super(props);
         this.changeValues = [];
+        this.isRemoveKey = props.navigation.state.params ? props.navigation.state.params.isRemoveKey : null;
         this.state = {
             dataArray: []
         }
@@ -55,8 +56,7 @@ export default class CustomKeyPage extends Component {
             this.onPop();
         });
         this.props.navigation.setParams({
-            onSave: this.onSave,
-            onBack: this.onPop
+            onSave: this.onSave
         })
         this.loadData();
 
@@ -75,6 +75,14 @@ export default class CustomKeyPage extends Component {
             this.props.navigation.goBack();
             return;
         }
+
+        if (this.isRemoveKey) {
+            for (let i = 0; i < this.changeValues.length; i++) {
+                ArrayUtils.remove(this.state.dataArray, this.changeValues[i]);
+
+            }
+        }
+
         this.languageDao.save(this.state.dataArray);
         this.props.navigation.goBack();
     }
@@ -87,7 +95,7 @@ export default class CustomKeyPage extends Component {
                 [
                     {
                         text: '取消',
-                        onPress: ()=>{this.props.navigation.goBack()},
+                        onPress: () => { this.props.navigation.goBack() },
                         style: 'cancel'
                     },
                     {
@@ -105,6 +113,7 @@ export default class CustomKeyPage extends Component {
 
 
     renderView() {
+
         if (!this.state.dataArray || this.state.dataArray.length == 0) {
             return;
         }
@@ -135,7 +144,6 @@ export default class CustomKeyPage extends Component {
     }
 
     renderCheckBox(data) {
-
         let leftText = data.name;
         return (
             <CheckBox
@@ -172,8 +180,10 @@ export default class CustomKeyPage extends Component {
     }
 
     onClick(data) {
+
         let dataArray = this.state.dataArray;
         data.checked = !data.checked;
+
         ArrayUtils.updateArray(this.changeValues, data);
         this.setState({
             dataArray: dataArray

@@ -19,9 +19,8 @@ export default class Home extends Component {
     super(props);
     this.languageDao = new LanguageDao(FLAG_LANGUAGE.flag_key);
     this.dataRepository = new DataRepository();
-    this.onload = this.onload.bind(this);
     this.state = {
-      languages:[],
+      languages: [],
       refreshing: false,
     };
   }
@@ -60,12 +59,12 @@ export default class Home extends Component {
   render() {
 
     let content = this.state.languages.length ? <ScrollableTabView tabBarUnderlineStyle={{ backgroundColor: '#1296db' }} tabBarActiveTextColor='#1296db'>
-    {this.state.languages.map((result,i,arr)=>{
-      let lan = arr[i];
-      return lan.checked ? 
-      <PopularTab tabLabel={lan.name} key={i}>{lan.name}</PopularTab>:null
-    })}
-  </ScrollableTabView> : null;
+      {this.state.languages.map((result, i, arr) => {
+        let lan = arr[i];
+        return lan.checked ?
+          <PopularTab tabLabel={lan.name} key={i} {...this.props} >{lan.name}</PopularTab> : null
+      })}
+    </ScrollableTabView> : null;
 
     return (
       <View style={styles.container}>
@@ -108,9 +107,16 @@ class PopularTab extends Component {
         })
       })
   }
+
+  onSelect(item) {
+    this.props.navigation.push('RepositoryDetail', {item:item});
+  }
+
   renderItem(data) {
     return (
-      <RepositoryCell item={data.item} />
+      <RepositoryCell item={data.item} onSelect={() => {
+        this.onSelect(data.item)
+      }} />
     );
   }
 
