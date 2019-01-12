@@ -11,6 +11,7 @@ export default class More extends Component{
     return (
       <View style={styles.container}>
         <Text style={styles.welcome} onPress={()=>{this.props.navigation.push('CustomKeyPage')}} >自定义标签</Text>
+        <Text style={styles.welcome} onPress={()=>{this.props.navigation.push('SortKeyPage')}} >标签排序</Text>
       </View>
     );
   }

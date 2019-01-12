@@ -4,6 +4,7 @@ import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
 import DataRepository from '../../expand/dao/DataRepository';
 import RepositoryCell from '../../Common/RepositoryCell';
+import LanguageDao, { FLAG_LANGUAGE } from '../../expand/dao/LanguageDao';
 
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
@@ -16,12 +17,26 @@ export default class Home extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      result: '',
-      refreshing: false,
-    };
+    this.languageDao = new LanguageDao(FLAG_LANGUAGE.flag_key);
     this.dataRepository = new DataRepository();
     this.onload = this.onload.bind(this);
+    this.state = {
+      languages:[],
+      refreshing: false,
+    };
+  }
+
+  componentDidMount() {
+
+    this.languageDao.fetch()
+      .then(result => {
+        this.setState({
+          languages: result
+        })
+      })
+      .catch(error => {
+        console.log(error);
+      })
   }
 
   onload() {
@@ -43,14 +58,18 @@ export default class Home extends Component {
   }
 
   render() {
+
+    let content = this.state.languages.length ? <ScrollableTabView tabBarUnderlineStyle={{ backgroundColor: '#1296db' }} tabBarActiveTextColor='#1296db'>
+    {this.state.languages.map((result,i,arr)=>{
+      let lan = arr[i];
+      return lan.checked ? 
+      <PopularTab tabLabel={lan.name} key={i}>{lan.name}</PopularTab>:null
+    })}
+  </ScrollableTabView> : null;
+
     return (
       <View style={styles.container}>
-        <ScrollableTabView tabBarUnderlineStyle={{ backgroundColor: '#1296db' }} tabBarActiveTextColor='#1296db'>
-          <PopularTab tabLabel="iOS">iOS</PopularTab>
-          <PopularTab tabLabel="Android">Android</PopularTab>
-          <PopularTab tabLabel="JavaScript">JavaScript</PopularTab>
-          <PopularTab tabLabel="Java">Java</PopularTab>
-        </ScrollableTabView>
+        {content}
       </View>
     );
   }

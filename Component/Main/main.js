@@ -10,6 +10,7 @@ import Shop from '../Shop/shop';
 import Mine from '../Mine/mine';
 import More from '../More/more';
 import CustomKeyPage from '../More/CustomKeyPage';
+import SortKeyPage from '../More/SortKeyPage';
 
 class DetailsScreen extends React.Component {
   render() {
@@ -56,6 +57,9 @@ const MoreStack = createStackNavigator({
   },
   CustomKeyPage: {
     screen: CustomKeyPage,
+  },
+  SortKeyPage: {
+    screen: SortKeyPage,
   },
 });
 

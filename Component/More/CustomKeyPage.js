@@ -1,78 +1,108 @@
 
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity, Image, ScrollView, DeviceEventEmitter } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Image, ScrollView, DeviceEventEmitter, Alert } from 'react-native';
 import LanguageDao, { FLAG_LANGUAGE } from '../../expand/dao/LanguageDao';
 import CheckBox from 'react-native-check-box';
 import ViewUtils from '../../Util/ViewUtils';
 import ArrayUtils from '../../Util/ArrayUtils';
 
-class BackImage extends React.Component { //创建一个返回按钮的组件
-    render() {
-        return (
-            <TouchableOpacity style={{ flex: 1, marginLeft: 15 }}>
-                <Image
-                    source={{ uri: 'ic_arrow_back_white_36pt' }}
-                    style={{ width: 15, height: 15, tintColor: '#1296db' }}
-                />
-            </TouchableOpacity>
-        );
-    }
-}
-
 export default class CustomKeyPage extends Component {
 
 
-/*
-    static中的this问题
-    1.在页面A中的componentDidMount方法，利用参数将方法传递给封装好的控件A，此时this指向的是控件A
-        this.props.navigation.setParams({
-            onSave: this.onSave,
-        })
-    2.利用通知机制通知页面A，将this指向页面A，调用页面A内的具体方法
-*/
+    /*
+        static中的this问题
+        1.在页面A中的componentDidMount方法，利用参数将方法传递给封装好的控件A，此时this指向的是控件A
+            this.props.navigation.setParams({
+                onSave: this.onSave,
+            })
+        2.利用通知机制通知页面A，将this指向页面A，调用页面A内的具体方法
+    */
 
     static navigationOptions = ({ navigation, screenProps }) => ({
 
         title: '自定义标签',
         headerBackTitle: null,
         headerRight: ViewUtils.getRightButton('保存', navigation.state.params ? navigation.state.params.onSave : null),
-        headerBackImage: <BackImage />
+        headerLeft: <View>
+            <TouchableOpacity style={{ width: 44, height: 44, justifyContent: 'center', alignItems: 'center' }}
+                onPress={() => {
+                    DeviceEventEmitter.emit('popName');
+                }}
+            >
+                <Image
+                    source={{ uri: 'ic_arrow_back_white_36pt' }}
+                    style={{ width: 26, height: 26, tintColor: '#1296db' }}
+                />
+            </TouchableOpacity>
+        </View>
     });
 
     constructor(props) {
         super(props);
         this.changeValues = [];
         this.state = {
-            dataArray: [],
-            text: "打印了",
+            dataArray: []
         }
-        this.languageDao = new LanguageDao(FLAG_LANGUAGE.flag_key);
-
+        this.languageDao = new LanguageDao(FLAG_LANGUAGE.flag_key)
     }
 
     componentDidMount() {
 
-        this.subscription = DeviceEventEmitter.addListener('xxxName',()=>{
-            this.onRefresh();
+        this.subscription = DeviceEventEmitter.addListener('xxxName', () => {
+            this.onSaveTags();
+        });
+        this.subscription = DeviceEventEmitter.addListener('popName', () => {
+            this.onPop();
         });
         this.props.navigation.setParams({
             onSave: this.onSave,
+            onBack: this.onPop
         })
         this.loadData();
 
     }
-    
+
     componentWillUnmount() {
         this.subscription.remove();
     }
 
     onSave() {
-        DeviceEventEmitter.emit('xxxName'); 
+        DeviceEventEmitter.emit('xxxName');
     }
 
-    onRefresh() {
-        alert(this.state.text);
+    onSaveTags() {
+        if (this.changeValues.length === 0) {
+            this.props.navigation.goBack();
+            return;
+        }
+        this.languageDao.save(this.state.dataArray);
+        this.props.navigation.goBack();
     }
+
+    onPop() {
+        if (this.changeValues.length) {
+            Alert.alert(
+                '提示',
+                '是否保存修改?',
+                [
+                    {
+                        text: '取消',
+                        onPress: ()=>{this.props.navigation.goBack()},
+                        style: 'cancel'
+                    },
+                    {
+                        text: '确定',
+                        onPress: () => {
+                            this.onSaveTags()
+                        }
+                    }
+                ],
+            )
+        } else {
+            this.props.navigation.goBack()
+        }
+    }
+
 
     renderView() {
         if (!this.state.dataArray || this.state.dataArray.length == 0) {
@@ -112,6 +142,7 @@ export default class CustomKeyPage extends Component {
                 style={{ flex: 1, padding: 10 }}
                 onClick={() => this.onClick(data)}
                 leftText={leftText}
+                isChecked={data.checked}
                 checkedImage={<Image style={{ width: 25, height: 25, tintColor: '#1296db' }} source={{ uri: 'ic_check_box' }} />}
                 unCheckedImage={<Image style={{ width: 25, height: 25, tintColor: '#1296db' }} source={{ uri: 'ic_check_box_outline_blank' }} />}
             />
@@ -141,8 +172,12 @@ export default class CustomKeyPage extends Component {
     }
 
     onClick(data) {
+        let dataArray = this.state.dataArray;
         data.checked = !data.checked;
         ArrayUtils.updateArray(this.changeValues, data);
+        this.setState({
+            dataArray: dataArray
+        })
     }
 }
 
