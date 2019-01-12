@@ -6,12 +6,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { createStackNavigator, createBottomTabNavigator, createAppContainer } from 'react-navigation';
 
 import Home from '../Home/home';
-import Shop from '../Shop/shop';
 import Mine from '../Mine/mine';
 import More from '../More/more';
 import CustomKeyPage from '../More/CustomKeyPage';
 import SortKeyPage from '../More/SortKeyPage';
 import RepositoryDetail from '../Home/RepositoryDetail';
+import TrendingPage from '../Shop/TrendingPage';
 
 class DetailsScreen extends React.Component {
   render() {
@@ -40,8 +40,8 @@ HomeStack.navigationOptions = ({ navigation }) => {
 };
 
 const ShopStack = createStackNavigator({
-  Shop: { screen: Shop },
-  Details: { screen: DetailsScreen },
+  TrendingPage: { screen: TrendingPage },
+  RepositoryDetail: { screen: RepositoryDetail },
 });
 
 const MineStack = createStackNavigator({
@@ -63,6 +63,17 @@ const MoreStack = createStackNavigator({
     screen: SortKeyPage,
   },
 });
+
+ShopStack.navigationOptions = ({ navigation }) => {
+  let tabBarVisible = true;
+  if (navigation.state.index > 0) {
+    tabBarVisible = false;
+  }
+
+  return {
+    tabBarVisible,
+  };
+};
 
 MoreStack.navigationOptions = ({ navigation }) => {
   let tabBarVisible = true;

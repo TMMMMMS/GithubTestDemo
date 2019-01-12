@@ -1,15 +1,16 @@
 
 import React, { Component } from 'react';
-import { WebView, View, Text, TextInput, StyleSheet } from 'react-native';
+import { WebView, View, StyleSheet } from 'react-native';
 
 const URL = 'https://www.baidu.com';
+const TRENDING_URL = 'https://github.com/';
 
 export default class WebViewTest extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            url: props.navigation.state.params.item.html_url,
+            url: props.navigation.state.params.item.html_url ? props.navigation.state.params.item.html_url :TRENDING_URL+ props.navigation.state.params.item.fullName,
             canGoBack:false,
         }
     }
