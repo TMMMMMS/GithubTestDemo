@@ -2,12 +2,18 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
-import DataRepository, {FLAG_STORAGE} from '../../expand/dao/DataRepository';
+import DataRepository, { FLAG_STORAGE } from '../../expand/dao/DataRepository';
 import RepositoryCell from '../../Common/RepositoryCell';
 import LanguageDao, { FLAG_LANGUAGE } from '../../expand/dao/LanguageDao';
+import ProjectModel from '../../model/ProjectModel';
+import FavoriteDao from '../../expand/dao/FavoriteDao';
+import Utils from '../../Util/Utils';
 
 const URL = 'https://api.github.com/search/repositories?q=';
 const QUERY_STR = '&sort=stars';
+
+// 全局都可以使用该favoriteDao
+var favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_popular)
 
 export default class Home extends Component {
 
@@ -80,6 +86,7 @@ class PopularTab extends Component {
     super(props);
     this.state = {
       data: '',
+      favoriteKeys: []
     };
     this.dataRepository = new DataRepository();
     this.renderItem = this.renderItem.bind(this);
@@ -90,18 +97,34 @@ class PopularTab extends Component {
     this.onload();
   }
 
+  // 更新project item 收藏状态
+  flushFavoriteState() {
+    let projectModels = [];
+    let items = this.items;
+    for (let i = 0; i < items.length; i++) {
+      projectModels.push(new ProjectModel(items[i], Utils.checkFavorite(items[i], this.state.favoriteKeys)));
+    }
+    this.updateState({
+      refreshing: false,
+      data: projectModels
+    })
+  }
+
+  updateState(dic) {
+    if (!this) return;
+    this.setState(dic);
+  }
+
   onload() {
     let url = URL + this.props.tabLabel + QUERY_STR;
     this.setState({ refreshing: true });
     this.dataRepository.fetchNetRepository(url)
       .then(result => {
-        this.setState({
-          data: result.items,
-          refreshing: false
-        })
+        this.items = result && result.items.length ? result.items : [];
+        this.getFavoriteKeys();
       })
       .catch(error => {
-        this.setState({
+        this.updateState({
           result: JSON.stringify(error),
           refreshing: false
         })
@@ -109,14 +132,41 @@ class PopularTab extends Component {
   }
 
   onSelect(item) {
-    this.props.navigation.push('RepositoryDetail', {item:item});
+    this.props.navigation.push('RepositoryDetail', { item: item });
   }
 
-  renderItem(data) {
+  // cell上收藏按钮的点击回调函数
+  onFavorite(item, isFavorite) {
+    if (isFavorite) {
+      favoriteDao.saveFavoriteItem(item.id.toString(), JSON.stringify(item));
+    } else {
+      favoriteDao.removeFavoriteItem(item.id.toString());
+    }
+  }
+
+  getFavoriteKeys() {
+
+    favoriteDao.getFavorites()
+    .then(keys=>{
+      if (keys) {
+        this.updateState({favoriteKeys:keys})
+      }
+      this.flushFavoriteState();
+    })
+    .catch(e=>{
+      this.flushFavoriteState();
+    })
+  }
+
+  renderItem(projectModel) {
     return (
-      <RepositoryCell item={data.item} onSelect={() => {
-        this.onSelect(data.item)
-      }} />
+      <RepositoryCell
+        projectModel={projectModel}
+        onSelect={() => {
+          this.onSelect(projectModel)
+        }} 
+        onFavorite={(item,isFavorite)=>this.onFavorite(item, isFavorite)}
+        />
     );
   }
 

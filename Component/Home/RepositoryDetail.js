@@ -6,7 +6,7 @@ import WebViewTest from '../../Common/WebViews';
 export default class RepositoryDetail extends Component {
 
     static navigationOptions = ({ navigation, screenProps }) => ({
-        title: navigation.state.params.item.full_name ? navigation.state.params.item.full_name : navigation.state.params.item.fullName,
+        title: navigation.state.params.item.item.item.full_name ? navigation.state.params.item.item.item.full_name : navigation.state.params.item.fullName,
         headerBackTitle: null,
         headerLeft: <View>
             <TouchableOpacity style={{ width: 44, height: 44, justifyContent: 'center', alignItems: 'center' }}

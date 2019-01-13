@@ -4,26 +4,56 @@ import { StyleSheet, Image, Text, View, TouchableOpacity } from 'react-native';
 
 export default class RepositoryCell extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            isFavorite: props.projectModel.item.isFavorite,
+            favoriteIcon: props.projectModel.item.isFavorite ? 'ic_star' : 'ic_unstar_transparent'
+        }
+    }
+
+    onPressFavorite() {
+        this.setFavoriteState(!this.state.isFavorite);
+        this.props.onFavorite(this.props.projectModel.item.item, !this.state.isFavorite)
+    }
+
+    // componentWillReceiveProps(nextProps) {
+
+    // }
+
+    setFavoriteState(isFavorite) {
+        this.setState({
+            isFavorite:isFavorite,
+            favoriteIcon: isFavorite ? 'ic_star' : 'ic_unstar_transparent'
+        })
+    }
+
     render() {
+
+        let favoriteButton = <TouchableOpacity
+            onPress={() => this.onPressFavorite()}
+        >
+            <Image style={{ width: 22, height: 22, tintColor: '#1296db' }} source={{ uri: this.state.favoriteIcon }} />
+        </TouchableOpacity>
 
         return (
             <TouchableOpacity style={styles.container} onPress={this.props.onSelect}>
                 <View style={styles.cell_container}>
-                    <Text style={styles.title}>{this.props.item.full_name}</Text>
-                    <Text style={styles.description}>{this.props.item.description}</Text>
+                    <Text style={styles.title}>{this.props.projectModel.item.item.full_name}</Text>
+                    <Text style={styles.description}>{this.props.projectModel.item.item.description}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'red' }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                             <Text>Author:</Text>
                             <Image
                                 style={{ height: 22, width: 22 }}
-                                source={{ uri: this.props.item.owner.avatar_url }}
+                                source={{ uri: this.props.projectModel.item.item.owner.avatar_url }}
                             />
                         </View>
                         <View style={{ flexDirection: 'row', alignContent: 'center' }}>
                             <Text>Stars:</Text>
-                            <Text>{this.props.item.stargazers_count}</Text>
+                            <Text>{this.props.projectModel.item.item.stargazers_count}</Text>
                         </View>
-                        <Image style={{ width: 22, height: 22 }} source={{ uri: 'ic_star' }} />
+                        {favoriteButton}
                     </View>
                 </View>
             </TouchableOpacity>

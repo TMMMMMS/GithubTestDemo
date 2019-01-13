@@ -10,7 +10,7 @@ export default class WebViewTest extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            url: props.navigation.state.params.item.html_url ? props.navigation.state.params.item.html_url :TRENDING_URL+ props.navigation.state.params.item.fullName,
+            url: props.navigation.state.params.item.item.item.html_url ? props.navigation.state.params.item.item.item.html_url :TRENDING_URL+ props.navigation.state.params.item.fullName,
             canGoBack:false,
         }
     }

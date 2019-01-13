@@ -7,7 +7,7 @@ import LangsData from '../../res/langs.json';
 
 export var FLAG_LANGUAGE = {flag_language:'flag_language_language', flag_key:'flag_language_key'};
 
-export default class DataRepository {
+export default class LanguageDao {
 
     constructor(flag) {
         this.flag = flag;
