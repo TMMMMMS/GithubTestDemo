@@ -29,7 +29,7 @@ export default class LanguageDao {
                     } else {
                         var data = this.flag === FLAG_LANGUAGE.flag_key ? keys : LangsData;
                         this.save(data);
-                        resolve(JSON.parse(data));
+                        resolve(data);
                     }
                 }
             })

@@ -30,8 +30,9 @@ export default class FavoriteDao {
     }
 
     getFavorites() {
+        const that = this;
         return new Promise ((resolve, reject) => {
-            AsyncStorage.getItem(this.favoriteKey,(error,result)=>{
+            AsyncStorage.getItem(that.favoriteKey,(error,result)=>{
                 if (!error) {
                     try{
                         resolve(JSON.parse(result));

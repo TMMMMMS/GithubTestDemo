@@ -5,13 +5,43 @@ import HTMLView from 'react-native-htmlview';
 
 export default class TrendingCell extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            isFavorite: props.projectModel.item.isFavorite,
+            favoriteIcon: props.projectModel.item.isFavorite ? 'ic_star' : 'ic_unstar_transparent'
+        }
+    }
+
+    onPressFavorite() {
+        this.setFavoriteState(!this.state.isFavorite);
+        this.props.onFavorite(this.props.projectModel.item.item, !this.state.isFavorite)
+    }
+
+    // componentWillReceiveProps(nextProps) {
+
+    // }
+
+    setFavoriteState(isFavorite) {
+        this.setState({
+            isFavorite:isFavorite,
+            favoriteIcon: isFavorite ? 'ic_star' : 'ic_unstar_transparent'
+        })
+    }
+
     render() {
-        let description = '<p>'+this.props.item.description+'</p>';
+        let description = '<p>'+this.props.projectModel.item.item.description+'</p>';
+
+        let favoriteButton = <TouchableOpacity
+            onPress={() => this.onPressFavorite()}
+        >
+            <Image style={{ width: 22, height: 22, tintColor: '#1296db' }} source={{ uri: this.state.favoriteIcon }} />
+        </TouchableOpacity>
 
         return (
             <TouchableOpacity onPress={this.props.onSelect}>
                 <View style={styles.cell_container}>
-                    <Text style={styles.title}>{this.props.item.fullName}</Text>
+                    <Text style={styles.title}>{this.props.projectModel.item.item.fullName}</Text>
                     <HTMLView
                         value={description}
                         stylesheet={{
@@ -19,11 +49,11 @@ export default class TrendingCell extends Component {
                             a:styles.description
                         }}
                     />
-                    <Text style={styles.description}>{this.props.item.meta}</Text>
+                    <Text style={styles.description}>{this.props.projectModel.item.item.meta}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'red' }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
                             <Text style={styles.description}>Build by:</Text>
-                            {this.props.item.contributors.map((result, i, arr) => {
+                            {this.props.projectModel.item.item.contributors.map((result, i, arr) => {
                                 return <Image
                                     style={{ height: 22, width: 22 }}
                                     source={{ uri: arr[i] }}
@@ -31,7 +61,7 @@ export default class TrendingCell extends Component {
                                 />
                             })}
                         </View>
-                        <Image style={{ width: 22, height: 22 }} source={{ uri: 'ic_star' }} />
+                        {favoriteButton}
                     </View>
                 </View>
             </TouchableOpacity>
