@@ -1,6 +1,7 @@
 
 import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import LanguageDao, { FLAG_LANGUAGE } from '../../expand/dao/LanguageDao'
 
 export default class More extends Component {
   static navigationOptions = {
@@ -10,9 +11,10 @@ export default class More extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome} onPress={() => { this.props.navigation.push('CustomKeyPage') }} >自定义标签</Text>
-        <Text style={styles.welcome} onPress={() => { this.props.navigation.push('SortKeyPage') }} >标签排序</Text>
-        <Text style={styles.welcome} onPress={() => { this.props.navigation.push('CustomKeyPage', {isRemoveKey:true}) }} >标签移除</Text>
+        <Text style={styles.welcome} onPress={() => { this.props.navigation.push('CustomKeyPage', { titleName: "自定义标签", flag: FLAG_LANGUAGE.flag_key }) }} >自定义标签</Text>
+        <Text style={styles.welcome} onPress={() => { this.props.navigation.push('SortKeyPage', { titleName: "标签排序" }) }} >标签排序</Text>
+        <Text style={styles.welcome} onPress={() => { this.props.navigation.push('CustomKeyPage', { titleName: "标签移除", isRemoveKey: true }) }} >标签移除</Text>
+        <Text style={styles.welcome} onPress={() => { this.props.navigation.push('CustomKeyPage', { titleName: "自定义语言", flag: FLAG_LANGUAGE.flag_language }) }} >自定义语言</Text>
       </View>
     );
   }

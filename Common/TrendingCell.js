@@ -9,7 +9,7 @@ export default class TrendingCell extends Component {
         let description = '<p>'+this.props.item.description+'</p>';
 
         return (
-            <TouchableOpacity style={styles.container} onPress={this.props.onSelect}>
+            <TouchableOpacity onPress={this.props.onSelect}>
                 <View style={styles.cell_container}>
                     <Text style={styles.title}>{this.props.item.fullName}</Text>
                     <HTMLView
@@ -31,9 +31,6 @@ export default class TrendingCell extends Component {
                                 />
                             })}
                         </View>
-                        {/* <View style={{ flexDirection: 'row', alignContent: 'center' }}>
-                            <Text>Stars:</Text>
-                        </View> */}
                         <Image style={{ width: 22, height: 22 }} source={{ uri: 'ic_star' }} />
                     </View>
                 </View>

@@ -20,7 +20,7 @@ export default class CustomKeyPage extends Component {
 
     static navigationOptions = ({ navigation, screenProps }) => ({
 
-        title: navigation.state.params && navigation.state.params.isRemoveKey ? '标签移除' : '自定义标签',
+        title: navigation.state.params.titleName,
         headerBackTitle: null,
         headerRight: ViewUtils.getRightButton(navigation.state.params && navigation.state.params.isRemoveKey ? '移除' : '保存', navigation.state.params ? navigation.state.params.onSave : null),
         headerLeft: <View>
@@ -40,11 +40,15 @@ export default class CustomKeyPage extends Component {
     constructor(props) {
         super(props);
         this.changeValues = [];
+        this.flag_key = props.navigation.state.params.flag ? props.navigation.state.params.flag : null;
         this.isRemoveKey = props.navigation.state.params ? props.navigation.state.params.isRemoveKey : null;
         this.state = {
             dataArray: []
         }
-        this.languageDao = new LanguageDao(FLAG_LANGUAGE.flag_key)
+        if (!this.flag_key) {
+            this.flag_key = FLAG_LANGUAGE.flag_key;
+        }
+        this.languageDao = new LanguageDao(this.flag_key)
     }
 
     componentDidMount() {

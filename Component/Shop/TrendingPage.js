@@ -1,17 +1,20 @@
 
 import React, { Component } from 'react';
-import { StyleSheet, View, FlatList, RefreshControl } from 'react-native';
+import { StyleSheet, View, FlatList, RefreshControl, Text, TouchableOpacity, Image } from 'react-native';
 import ScrollableTabView from 'react-native-scrollable-tab-view';
-import DataRepository, {FLAG_STORAGE} from '../../expand/dao/DataRepository';
+import DataRepository, { FLAG_STORAGE } from '../../expand/dao/DataRepository';
 import TrendingCell from '../../Common/TrendingCell';
 import LanguageDao, { FLAG_LANGUAGE } from '../../expand/dao/LanguageDao';
+import NaviBar from 'react-native-pure-navigation-bar';
+import TimeSpan from '../../model/TimeSpan';
 
 const API_URL = 'https://github.com/trending/';
 
 export default class TrendingPage extends Component {
 
   static navigationOptions = {
-    title: "趋势"
+    // title: "趋势"
+    header: null
   };
 
   constructor(props) {
@@ -21,6 +24,7 @@ export default class TrendingPage extends Component {
     this.state = {
       languages: [],
       refreshing: false,
+      isVisible: false
     };
   }
 
@@ -35,6 +39,32 @@ export default class TrendingPage extends Component {
       .catch(error => {
         console.log(error);
       })
+
+  }
+
+  showPopover() {
+    this.refs.button.measure((ox, oy, width, height, px, py) => {
+      this.setState({
+        isVisible: true,
+        buttonRect: { x: px, y: py, width: width, height: height }
+      });
+    });
+  }
+
+  closePopover() {
+    this.setState({ isVisible: false });
+  }
+
+  renderTitleView() {
+
+    return <View>
+      <TouchableOpacity ref='button' onPress={() => this.show}>
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={{ fontSize: 16, fontWeight: 'bold' }}>趋势</Text>
+          <Image source={{ uri: 'ic_spinner_triangle' }} style={{ width: 14, height: 14, tintColor: '#1296db', marginLeft: 5 }} ></Image>
+        </View>
+      </TouchableOpacity>
+    </View>
   }
 
   render() {
@@ -49,6 +79,9 @@ export default class TrendingPage extends Component {
 
     return (
       <View style={styles.container}>
+        <NaviBar
+          title={this.renderTitleView()}
+          gobackImage={null} />
         {content}
       </View>
     );
@@ -72,7 +105,7 @@ class TrendingTab extends Component {
   }
 
   onload() {
-    let url = this.getFechUrl('?since=daily',this.props.tabLabel);
+    let url = this.getFechUrl('?since=daily', this.props.tabLabel);
     this.setState({ refreshing: true });
     this.dataRepository.fetchNetRepository(url)
       .then(result => {
@@ -94,7 +127,7 @@ class TrendingTab extends Component {
   }
 
   onSelect(item) {
-    this.props.navigation.push('RepositoryDetail', {item:item});
+    this.props.navigation.push('RepositoryDetail', { item: item });
   }
 
   renderItem(data) {
