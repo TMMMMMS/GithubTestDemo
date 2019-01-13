@@ -4,7 +4,7 @@ export default class Utils {
     static checkFavorite(item, items) {
         for (let i = 0; i < items.length; i++) {
             let id = item.id ? item.id.toString() : item.fullName;
-            if (item.id === items[i]) {
+            if (id === items[i]) {
                 return true;
             }
         }

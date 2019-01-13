@@ -10,7 +10,7 @@ import ProjectModel from '../../model/ProjectModel';
 import FavoriteDao from '../../expand/dao/FavoriteDao';
 import Utils from '../../Util/Utils';
 
-// var favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_trending);
+var favoriteDao = new FavoriteDao(FLAG_STORAGE.flag_trending);
 var dataRepository = new DataRepository(FLAG_STORAGE.flag_trending);
 const API_URL = 'https://github.com/trending/';
 
