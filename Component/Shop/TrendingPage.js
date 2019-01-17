@@ -154,7 +154,11 @@ class TrendingTab extends Component {
   }
 
   onSelect(item) {
-    this.props.navigation.push('RepositoryDetail1', { item: item,flag: FLAG_STORAGE.flag_trending });
+    this.props.navigation.push('RepositoryDetail1', {
+      item: item, flag: FLAG_STORAGE.flag_trending, callback: (returnData) => {
+        this.onload();
+      }
+    });
   }
 
   // cell上收藏按钮的点击回调函数

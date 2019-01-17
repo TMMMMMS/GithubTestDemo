@@ -51,7 +51,8 @@ export default class RepositoryDetail extends Component {
         this.updateState({
             isFavorite:isFavorite,
             favoriteIcon: isFavorite ? 'ic_star_navbar' : 'ic_unstar_navbar'
-        })
+        });
+        this.props.navigation.state.params.callback('返回的数据');
     }
 
     updateState(dic) {

@@ -90,10 +90,15 @@ class PopularTab extends Component {
       favoriteKeys: []
     };
     this.dataRepository = new DataRepository();
+    this.renderItem = this.renderItem.bind(this);
   }
 
   componentDidMount() {
     this.onload();
+  }
+
+  returnData(data) {
+    alert('回调了');
   }
 
   // 更新project item 收藏状态
@@ -130,7 +135,11 @@ class PopularTab extends Component {
   }
 
   onSelect(item) {
-    this.props.navigation.push('RepositoryDetail', { item: item, flag: FLAG_STORAGE.flag_popular });
+    this.props.navigation.push('RepositoryDetail', {
+      item: item, flag: FLAG_STORAGE.flag_popular, callback: (returnData) => {
+        this.onload();
+      }
+    });
   }
 
   // cell上收藏按钮的点击回调函数
@@ -157,13 +166,15 @@ class PopularTab extends Component {
   }
 
   renderItem(projectModel) {
-    return <RepositoryCell
-      projectModel={projectModel}
-      onSelect={() => {
-        this.onSelect(projectModel)
-      }}
-      onFavorite={(item, isFavorite) => this.onFavorite(item, isFavorite)}
-    />
+    return (
+      <RepositoryCell
+        projectModel={projectModel}
+        onSelect={() => {
+          this.onSelect(projectModel)
+        }}
+        onFavorite={(item, isFavorite) => this.onFavorite(item, isFavorite)}
+      />
+    )
   }
 
   _keyExtractor = (item, index) => index.toString();
@@ -174,11 +185,11 @@ class PopularTab extends Component {
         <FlatList
           keyExtractor={this._keyExtractor}
           data={this.state.dataSource}
-          renderItem={(item)=>this.renderItem(item)}
+          renderItem={this.renderItem}
           refreshControl={
             <RefreshControl
               refreshing={this.state.refreshing}
-              onRefresh={()=>this.onload()}
+              onRefresh={() => this.onload()}
               colors={['#1296db']}
               title={'Loading'}
               titleColor={['#1296db']}

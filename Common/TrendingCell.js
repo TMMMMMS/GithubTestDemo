@@ -18,9 +18,9 @@ export default class TrendingCell extends Component {
         this.props.onFavorite(this.props.projectModel.item.item, !this.state.isFavorite)
     }
 
-    // componentWillReceiveProps(nextProps) {
-
-    // }
+    componentWillReceiveProps(nextProps) {
+        this.setFavoriteState(nextProps.projectModel.item.isFavorite);
+    }
 
     setFavoriteState(isFavorite) {
         this.setState({
