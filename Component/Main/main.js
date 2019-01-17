@@ -12,6 +12,7 @@ import CustomKeyPage from '../More/CustomKeyPage';
 import SortKeyPage from '../More/SortKeyPage';
 import RepositoryDetail from '../Home/RepositoryDetail';
 import TrendingPage from '../Shop/TrendingPage';
+import FavoritePage from '../Mine/FavoritePage';
 
 class DetailsScreen extends React.Component {
   render() {
@@ -41,12 +42,12 @@ HomeStack.navigationOptions = ({ navigation }) => {
 
 const ShopStack = createStackNavigator({
   TrendingPage: { screen: TrendingPage },
-  RepositoryDetail: { screen: RepositoryDetail },
+  RepositoryDetail1: { screen: RepositoryDetail },
 });
 
 const MineStack = createStackNavigator({
-  Mine: { screen: Mine },
-  Details: { screen: DetailsScreen },
+  Mine: { screen: FavoritePage },
+  RepositoryDetail2: { screen: RepositoryDetail },
 });
 
 const MoreStack = createStackNavigator({

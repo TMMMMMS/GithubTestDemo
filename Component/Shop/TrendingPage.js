@@ -107,6 +107,10 @@ class TrendingTab extends Component {
     this.onload();
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.onload();
+  }
+
   onload() {
     let url = this.getFechUrl('?since=daily', this.props.tabLabel);
     this.setState({ refreshing: true });
@@ -150,7 +154,7 @@ class TrendingTab extends Component {
   }
 
   onSelect(item) {
-    this.props.navigation.push('RepositoryDetail', { item: item });
+    this.props.navigation.push('RepositoryDetail1', { item: item,flag: FLAG_STORAGE.flag_trending });
   }
 
   // cell上收藏按钮的点击回调函数
