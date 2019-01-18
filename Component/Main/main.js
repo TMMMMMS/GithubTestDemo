@@ -13,6 +13,7 @@ import SortKeyPage from '../More/SortKeyPage';
 import RepositoryDetail from '../Home/RepositoryDetail';
 import TrendingPage from '../Shop/TrendingPage';
 import FavoritePage from '../Mine/FavoritePage';
+import AboutPage from '../More/AboutPage';
 
 class DetailsScreen extends React.Component {
   render() {
@@ -63,6 +64,9 @@ const MoreStack = createStackNavigator({
   SortKeyPage: {
     screen: SortKeyPage,
   },
+  AboutPage: {
+    screen: AboutPage
+  }
 });
 
 ShopStack.navigationOptions = ({ navigation }) => {

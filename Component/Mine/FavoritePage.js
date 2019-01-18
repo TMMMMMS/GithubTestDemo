@@ -55,9 +55,6 @@ class FavoriteTab extends Component {
     this.onload();
   }
 
-  componentWillReceiveProps(nextProps) {
-    console.log('进来了');
-  }
 
   updateState(dic) {
     if (!this) return;
