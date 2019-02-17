@@ -50,8 +50,8 @@ export default class TrendingCell extends Component {
                         }}
                     />
                     <Text style={styles.description}>{this.props.projectModel.item.item.meta}</Text>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'red' }}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}}>
+                        <View style={{ flexDirection: 'row', alignItems:'center'}}>
                             <Text style={styles.description}>Build by:</Text>
                             {this.props.projectModel.item.item.contributors.map((result, i, arr) => {
                                 return <Image
@@ -70,9 +70,6 @@ export default class TrendingCell extends Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1
-    },
     title: {
         color: '#212121',
         marginBottom: 2,

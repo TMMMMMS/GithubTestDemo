@@ -49,7 +49,7 @@ export default class RepositoryCell extends Component {
                                 source={{ uri: this.props.projectModel.item.item.owner.avatar_url }}
                             />
                         </View>
-                        <View style={{ flexDirection: 'row',  backgroundColor: 'red' }}>
+                        <View style={{ flexDirection: 'row'}}>
                             <Text>Stars:</Text>
                             <Text>{this.props.projectModel.item.item.stargazers_count}</Text>
                         </View>
