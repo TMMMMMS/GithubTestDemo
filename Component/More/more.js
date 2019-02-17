@@ -64,7 +64,8 @@ export default class More extends Component {
     return (
       <View style={GlobalStyles.root_container}>
         <ScrollView>
-          <TouchableOpacity onPress={() => this.onclick(MORE_MENU.About)}>
+          {/* <TouchableOpacity onPress={() => this.onclick(MORE_MENU.About)}> */}
+          <TouchableOpacity>
             <View style={[styles.item, { height: 90 }]}>
               <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 <Image source={{ uri: 'ic_trending' }} style={{ width: 40, height: 40, marginRight: 10, tintColor: '#1296db' }} />
@@ -80,29 +81,29 @@ export default class More extends Component {
           <View style={GlobalStyles.line} />
           {this.getItem(MORE_MENU.Custom_Lnaguage, 'ic_custom_language', '自定义语言')}
 
-          <View style={GlobalStyles.line} />
+          {/* <View style={GlobalStyles.line} />
           {this.getItem(MORE_MENU.Sort_Language, 'ic_swap_vert', '语言排序')}
-          <View style={GlobalStyles.line} />
+          <View style={GlobalStyles.line} /> */}
 
           {/* 标签管理 */}
           <Text style={styles.groupTitle}>标签管理</Text>
           <View style={GlobalStyles.line} />
           {this.getItem(MORE_MENU.Custom_key, 'ic_custom_language', '自定义标签')}
 
-          <View style={GlobalStyles.line} />
+          {/* <View style={GlobalStyles.line} />
           {this.getItem(MORE_MENU.Sort_key, 'ic_swap_vert', '标签排序')}
 
           <View style={GlobalStyles.line} />
           {this.getItem(MORE_MENU.Remove_Key, 'ic_remove', '标签移除')}
-          <View style={GlobalStyles.line} />
+          <View style={GlobalStyles.line} /> */}
 
           {/* 设置 */}
-          <Text style={styles.groupTitle}>设置</Text>
+          {/* <Text style={styles.groupTitle}>设置</Text>
           <View style={GlobalStyles.line} />
           {this.getItem(MORE_MENU.Custom_Theme, 'ic_view_quilt', '自定义主题')}
           <View style={GlobalStyles.line} />
           {this.getItem(MORE_MENU.About_Author, 'ic_insert_emoticon', '关于作者')}
-          <View style={GlobalStyles.line} />
+          <View style={GlobalStyles.line} /> */}
 
         </ScrollView>
       </View>

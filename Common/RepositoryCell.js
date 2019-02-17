@@ -41,15 +41,15 @@ export default class RepositoryCell extends Component {
                 <View style={styles.cell_container}>
                     <Text style={styles.title}>{this.props.projectModel.item.item.full_name}</Text>
                     <Text style={styles.description}>{this.props.projectModel.item.item.description}</Text>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', backgroundColor: 'red' }}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems:'center'}}>
+                        <View style={{ flexDirection: 'row', alignItems:'center'}}>
                             <Text>Author:</Text>
                             <Image
                                 style={{ height: 22, width: 22 }}
                                 source={{ uri: this.props.projectModel.item.item.owner.avatar_url }}
                             />
                         </View>
-                        <View style={{ flexDirection: 'row', alignContent: 'center' }}>
+                        <View style={{ flexDirection: 'row',  backgroundColor: 'red' }}>
                             <Text>Stars:</Text>
                             <Text>{this.props.projectModel.item.item.stargazers_count}</Text>
                         </View>

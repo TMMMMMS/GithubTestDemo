@@ -64,7 +64,7 @@ export default class TrendingPage extends Component {
       <TouchableOpacity ref='button' onPress={() => this.show}>
         <View style={{ flexDirection: 'row' }}>
           <Text style={{ fontSize: 16, fontWeight: 'bold' }}>趋势</Text>
-          <Image source={{ uri: 'ic_spinner_triangle' }} style={{ width: 14, height: 14, tintColor: '#1296db', marginLeft: 5 }} ></Image>
+          {/* <Image source={{ uri: 'ic_spinner_triangle' }} style={{ width: 14, height: 14, tintColor: '#1296db', marginLeft: 5 }} ></Image> */}
         </View>
       </TouchableOpacity>
     </View>
